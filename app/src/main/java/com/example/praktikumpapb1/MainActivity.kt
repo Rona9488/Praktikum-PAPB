@@ -11,6 +11,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
@@ -39,8 +41,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyScreen() {
-    var text by remember { mutableStateOf("") }
-    var inputText by remember { mutableStateOf("") }
+    var nameInput by remember { mutableStateOf("") }
+    var nimInput by remember { mutableStateOf("") }
+    var submittedName by remember { mutableStateOf("") }
+    var submittedNim by remember { mutableStateOf("") }
     var isButtonClicked by remember { mutableStateOf(false) }
     var showCat by remember { mutableStateOf(false) }
 
@@ -56,9 +60,17 @@ fun MyScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = text,
+            value = submittedName,
             onValueChange = {},
-            label = { Text("Submitted Text") },
+            label = { Text("Submitted Name") },
+            readOnly = true,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        OutlinedTextField(
+            value = submittedNim,
+            onValueChange = {},
+            label = { Text("Submitted NIM") },
             readOnly = true,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -66,16 +78,30 @@ fun MyScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = inputText,
-            onValueChange = { inputText = it },
-            label = { Text("Enter text here") }
+            value = nameInput,
+            onValueChange = { nameInput = it },
+            label = { Text("Isi nama di sini") }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = nimInput,
+            onValueChange = { newText ->
+                if (newText.all { it.isDigit() }) {
+                    nimInput = newText
+                }
+            },
+            label = { Text("Isi NIM di sini") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-                text = inputText
+                submittedName = nameInput  // Simpan input nama ke output
+                submittedNim = nimInput    // Simpan input NIM ke output
                 isButtonClicked = !isButtonClicked
                 showCat = true
             },
